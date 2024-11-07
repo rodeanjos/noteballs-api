@@ -31,7 +31,7 @@
       </div>
     </div>
     <footer class="card-footer">
-      <a href="#" class="card-footer-item">Edit</a>
+      <RouterLink :to="`${'/edit-note/' + note.id}`" class="card-footer-item">Edit</RouterLink>
       <a @click.prevent="handleDeleteClicked" class="card-footer-item"
         >Delete</a
       >
