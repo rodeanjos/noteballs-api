@@ -1,5 +1,6 @@
 <script setup>
   import { ref } from "vue";
+  import { vAutofocus } from "@/directives/vAutofocus";
 
   const props = defineProps({
     modelValue: {
@@ -39,6 +40,7 @@
           ref="textAreaRef"
           class="textarea"
           :placeholder="props.placeholder"
+          v-autofocus
         />
       </div>
     </div>
