@@ -6,19 +6,19 @@
 
   const router = useRouter();
   const route = useRoute();
-  const NotesStore = useNotesStore();
+  const notesStore = useNotesStore();
 
   const inputRef = ref(null);
   const noteContent = ref("");
 
-  noteContent.value = NotesStore.getNoteContent(route.params.id);
+  noteContent.value = notesStore.getNoteContent(route.params.id);
 
   const goBack = () => {
     router.back();
   };
 
   const handleSaveClicked = () => {
-    NotesStore.updateNote(route.params.id, noteContent.value);
+    notesStore.updateNote(route.params.id, noteContent.value);
     goBack();
   };
 </script>

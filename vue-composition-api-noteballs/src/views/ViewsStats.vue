@@ -4,7 +4,7 @@
   import { vAutofocus } from "@/directives/vAutofocus";
   import { useWatchCharacters } from "@/use/useWatchCharacters";
 
-  const NotesStore = useNotesStore();
+  const notesStore = useNotesStore();
 
   const feedback = ref("");
 
@@ -22,11 +22,11 @@
       <tbody>
         <tr>
           <td>Number of notes</td>
-          <td>{{ NotesStore.totalOfNotes }}</td>
+          <td>{{ notesStore.totalOfNotes }}</td>
         </tr>
         <tr>
           <td>Number of characters</td>
-          <td>{{ NotesStore.totalOfCharacters }}</td>
+          <td>{{ notesStore.totalOfCharacters }}</td>
         </tr>
       </tbody>
     </table>
