@@ -1,7 +1,7 @@
 <script setup>
   import { ref } from "vue";
 
-  const showMobileNav = ref(true);
+  const showMobileNav = ref(false);
 </script>
 <template>
   <nav class="navbar is-success" role="navigation" aria-label="main navigation">
