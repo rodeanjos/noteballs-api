@@ -15,10 +15,6 @@
     newNote.value = "";
     inputRef.value.focusTextArea();
   };
-
-  const deleteNote = (idToDelete) => {
-    notesStore.deleteNote(idToDelete);
-  };
 </script>
 <template>
   <div class="notes">
@@ -37,7 +33,6 @@
       v-for="i in notesStore.notes"
       :key="i.id"
       :note="i"
-      @delete-clicked="deleteNote"
     />
   </div>
 </template>

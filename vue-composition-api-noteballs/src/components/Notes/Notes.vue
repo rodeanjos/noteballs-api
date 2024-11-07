@@ -1,5 +1,6 @@
 <script setup>
-  import { computed } from "vue";
+  import { computed, reactive } from "vue";
+  import ModalDeleteNote from "../Modals/ModalDeleteNote.vue";
 
   const props = defineProps({
     note: {
@@ -14,11 +15,9 @@
     return `${length}` + " " + `${desc}`;
   });
 
-  const emit = defineEmits(['deleteClicked'])
-
-  const handleDeleteClicked = () => {
-    emit('deleteClicked', props.note.id)
-  };
+  const modals = reactive({
+    deleteNote: false
+  })
 </script>
 <template>
   <div class="card mb-4">
@@ -32,9 +31,10 @@
     </div>
     <footer class="card-footer">
       <RouterLink :to="`${'/edit-note/' + note.id}`" class="card-footer-item">Edit</RouterLink>
-      <a @click.prevent="handleDeleteClicked" class="card-footer-item"
+      <a @click.prevent="modals.deleteNote = true" class="card-footer-item"
         >Delete</a
       >
     </footer>
+    <ModalDeleteNote v-if="modals.deleteNote" v-model="modals.deleteNote" :note-id="note.id" />
   </div>
 </template>
