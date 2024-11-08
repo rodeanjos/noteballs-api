@@ -1,44 +1,55 @@
 import { defineStore } from "pinia";
+import { db } from "@/js/firebase";
+import {
+  collection,
+  onSnapshot,
+  doc,
+  addDoc,
+  deleteDoc,
+  updateDoc,
+  query,
+  orderBy,
+} from "firebase/firestore";
+
+const collectionRef = collection(db, "notes");
+const notesQuery = query(collectionRef, orderBy("id", "desc"));
 
 export const useNotesStore = defineStore("notesStore", {
   state: () => {
     return {
-      notes: [
-        {
-          id: "id1",
-          content:
-            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates necessitatibus quis reiciendis incidunt omnis maiores veritatis repudiandae ex non, doloremque assumenda id nesciunt architecto quae aliquam eum hic debitis natus!",
-        },
-        {
-          id: "id2",
-          content: "A shorter note!",
-        },
-        {
-          id: "id3",
-          content: "A note from store!",
-        },
-      ],
+      notes: [],
     };
   },
   actions: {
-    addNote(noteContent) {
+    async getNotesFromFirebase() {
+      onSnapshot(notesQuery, (querySnapshot) => {
+        let notesVar = [];
+        querySnapshot.forEach((doc) => {
+          let note = {
+            id: doc.id,
+            content: doc.data().content,
+          };
+          notesVar.push(note);
+        });
+        this.notes = notesVar;
+      });
+    },
+    async addNote(noteContent) {
       let currentDate = new Date().getTime(),
         id = currentDate.toString();
 
-      let note = {
-        id: id,
+      await addDoc(collectionRef, {
+        id,
         content: noteContent,
-      };
-
-      this.notes.unshift(note);
+      });
     },
-    deleteNote(noteId) {
-      this.notes = this.notes.filter((note) => note.id !== noteId);
+    async deleteNote(noteId) {
+      await deleteDoc(doc(collectionRef, noteId));
     },
-    updateNote(id, content) {
-      let index = this.notes.findIndex((note) => note.id === id);
-
-      this.notes[index].content = content;
+    async updateNote(id, newContent) {
+      await updateDoc(doc(collectionRef, id), {
+        content: newContent,
+      });
     },
   },
   getters: {

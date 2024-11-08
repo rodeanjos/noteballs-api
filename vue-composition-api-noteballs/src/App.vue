@@ -1,5 +1,13 @@
 <script setup>
-  import NavBar from "./components/Layout/NavBar/NavBar.vue";
+  import { onMounted } from "vue";
+import NavBar from "./components/Layout/NavBar/NavBar.vue";
+  import { useNotesStore } from "./stores/storeNotes";
+
+  const notesStore = useNotesStore();
+
+  onMounted(() => {
+    notesStore.getNotesFromFirebase()
+  })
 </script>
 <template>
   <NavBar></NavBar>
