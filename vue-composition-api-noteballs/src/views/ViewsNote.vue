@@ -29,10 +29,19 @@
         </button>
       </template>
     </InputTemplate>
-    <Note
-      v-for="i in notesStore.notes"
-      :key="i.id"
-      :note="i"
+    <progress
+      v-if="!notesStore.notesLoaded"
+      class="progress is-link"
+      max="100"
     />
+    <template v-else>
+      <Note v-for="i in notesStore.notes" :key="i.id" :note="i" />
+    </template>
+    <div
+      v-if="!notesStore.notes.length"
+      class="has-text-centered has-text-grey-light"
+    >
+      There is no notes to show
+    </div>
   </div>
 </template>

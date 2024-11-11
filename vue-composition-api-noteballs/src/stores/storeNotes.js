@@ -12,35 +12,39 @@ import {
 } from "firebase/firestore";
 
 const collectionRef = collection(db, "notes");
-const notesQuery = query(collectionRef, orderBy("id", "desc"));
+const notesQuery = query(collectionRef, orderBy("date", "desc"));
 
 export const useNotesStore = defineStore("notesStore", {
   state: () => {
     return {
       notes: [],
+      notesLoaded: false,
     };
   },
   actions: {
     async getNotesFromFirebase() {
+      this.notesLoaded = false;
       onSnapshot(notesQuery, (querySnapshot) => {
         let notesVar = [];
         querySnapshot.forEach((doc) => {
           let note = {
             id: doc.id,
             content: doc.data().content,
+            date: doc.data().date,
           };
           notesVar.push(note);
         });
-        this.notes = notesVar;
+          this.notes = notesVar;
+          this.notesLoaded = true;
       });
     },
     async addNote(noteContent) {
       let currentDate = new Date().getTime(),
-        id = currentDate.toString();
+        date = currentDate.toString();
 
       await addDoc(collectionRef, {
-        id,
         content: noteContent,
+        date,
       });
     },
     async deleteNote(noteId) {
