@@ -1,13 +1,13 @@
 <script setup>
   import { onMounted } from "vue";
-import NavBar from "./components/Layout/NavBar/NavBar.vue";
-  import { useNotesStore } from "./stores/storeNotes";
+  import NavBar from "./components/Layout/NavBar/NavBar.vue";
+  import { useAuthStore } from "./stores/storeAuth";
 
-  const notesStore = useNotesStore();
+  const authStore = useAuthStore();
 
   onMounted(() => {
-    notesStore.getNotesFromFirebase()
-  })
+    authStore.init();
+  });
 </script>
 <template>
   <NavBar></NavBar>

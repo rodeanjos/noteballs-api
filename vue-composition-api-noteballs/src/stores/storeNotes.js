@@ -10,9 +10,11 @@ import {
   query,
   orderBy,
 } from "firebase/firestore";
+import { useAuthStore } from "./storeAuth";
 
-const collectionRef = collection(db, "notes");
-const notesQuery = query(collectionRef, orderBy("date", "desc"));
+let collectionRef;
+let notesQuery;
+let getNotesSnapshot = null;
 
 export const useNotesStore = defineStore("notesStore", {
   state: () => {
@@ -22,9 +24,18 @@ export const useNotesStore = defineStore("notesStore", {
     };
   },
   actions: {
+    init() {
+      const authStore = useAuthStore();
+
+      collectionRef = collection(db, "users", authStore.user.id, "notes");
+      notesQuery = query(collectionRef, orderBy("date", "desc"));
+
+      this.getNotesFromFirebase();
+    },
     async getNotesFromFirebase() {
       this.notesLoaded = false;
-      onSnapshot(notesQuery, (querySnapshot) => {
+
+      getNotesSnapshot = onSnapshot(notesQuery, (querySnapshot) => {
         let notesVar = [];
         querySnapshot.forEach((doc) => {
           let note = {
@@ -34,9 +45,13 @@ export const useNotesStore = defineStore("notesStore", {
           };
           notesVar.push(note);
         });
-          this.notes = notesVar;
-          this.notesLoaded = true;
+        this.notes = notesVar;
+        this.notesLoaded = true;
       });
+    },
+    clearNotes() {
+      this.notes = [];
+      if (getNotesSnapshot) getNotesSnapshot() //unsubscribe from any active listener
     },
     async addNote(noteContent) {
       let currentDate = new Date().getTime(),
