@@ -47,6 +47,8 @@ export const useNotesStore = defineStore("notesStore", {
         });
         this.notes = notesVar;
         this.notesLoaded = true;
+      }, error => {
+        console.log(error.code + " " + error.message)
       });
     },
     clearNotes() {
